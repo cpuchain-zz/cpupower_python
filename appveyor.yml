@@ -1,0 +1,43 @@
+environment:
+  TWINE_USERNAME: minkcrypto
+  TWINE_PASSWORD:
+    secure: HDPpfcSvHTCYjAEfPEgjhA==
+  matrix:
+  - PYTHON_VERSION: "2.7"
+    CONDAPATH: 'C:\Miniconda'
+  - PYTHON_VERSION: "3.5"
+    CONDAPATH: 'C:\Miniconda35'
+  - PYTHON_VERSION: "3.6"
+    CONDAPATH: 'C:\Miniconda36'
+  - PYTHON_VERSION: "3.7"
+    CONDAPATH: 'C:\Miniconda37'
+
+cache:
+  - '%LOCALAPPDATA%\pip\Cache'
+  - '%USERPROFILE%\.cache\matplotlib'
+
+platform:
+  - x86
+  - x64
+
+install:
+  - if "%PLATFORM%" == "x86" set PATH=%CONDPATH%\bin;%CONDAPATH%\Scripts;%PATH%
+  - if "%PLATFORM%" == "x64" set PATH=%CONDPATH%-x64\bin;%CONDAPATH%-x64\Scripts;%PATH%
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q --name python%PYTHON_VERSION%-%PLATFORM% python=%PYTHON_VERSION%
+  - activate python%PYTHON_VERSION%-%PLATFORM%
+  - conda install -q setuptools matplotlib nose pandas wheel scipy sphinx lockfile pip libpython
+  - conda install -q -c msys2 m2w64-toolchain
+  - python setup.py config_fc
+  - python setup.py config --compiler=mingw32 --fcompiler=gfortran
+
+build_script:
+  - python setup.py build
+  - python setup.py bdist_wheel
+
+artifacts:
+  - path: dist\*.whl
+
+on_success:
+  - if "%APPVEYOR_REPO_TAG%"=="true" ( twine upload dist\*.whl )
