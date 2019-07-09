@@ -29,8 +29,7 @@ install:
   - activate python%PYTHON_VERSION%-%PLATFORM%
   - conda install -q setuptools matplotlib nose pandas wheel scipy sphinx lockfile pip libpython
   - conda install -q -c msys2 m2w64-toolchain
-  - python setup.py config_fc
-  - python setup.py config --compiler=mingw32 --fcompiler=gfortran
+  - python setup.py config --compiler=mingw32
 
 build_script:
   - python setup.py build
