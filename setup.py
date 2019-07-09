@@ -10,7 +10,7 @@ cpupower_module = Extension('cpupower',
                             include_dirs=['.'])
 
 setup (name = 'cpupower',
-       version = '1.0.0',
+       version = '1.0.1',
        author_email = 'minkcrypto@gmail.com',
        author = 'Min Khang Aung',
        url = 'https://github.com/cpuchain/cpupower_python',
